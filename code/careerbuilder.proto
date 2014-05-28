@@ -1,0 +1,40 @@
+package cb;
+
+option optimize_for = CODE_SIZE; // SPEED //LITE_RUNTIME
+
+message Job {
+	required int32 id = 1; //The number is a Tag between 1 to 2^29 - use to encode param in bin
+	required string title = 2; //title will be required ForEver
+	optional string description = 3;
+	repeated int32 other_ids = 4 [packed=true]; //optimize version for encoding arrays of numbers
+	extensions 100 to 2999;
+
+	enum Type {
+		FULL_TIME = 0;
+		PART_TIME = 1;
+		CONTRACT = 2;
+	}
+}
+
+message Company {
+	required int32 id = 1; 
+	required string name = 2;
+	repeated Job jobs = 3; 
+	optional string address = 4;
+	optional int32 ranking = 5 [default = 10];
+
+	extensions 1000 to max;
+	enum PhoneType{
+		MOBILE = 0;
+		HOME = 1;
+		WORK = 3;
+	}
+
+	message PhoneNumber{
+		required string number = 1;
+		optional PhoneType type = 2 [default = HOME];
+	}
+
+	repeated PhoneNumber phone = 6; 
+
+}
